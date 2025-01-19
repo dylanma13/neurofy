@@ -3,7 +3,7 @@ import streamlit as st
 
 st.title("Neurofy")
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-4.0"
