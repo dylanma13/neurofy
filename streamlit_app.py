@@ -1,34 +1,33 @@
+from openai import OpenAI
 import streamlit as st
-import openai
 
-# Set up the Streamlit app
 st.title("Neurofy")
-st.write("Welcome to Neurofy! Start chatting below:")
 
-# OpenAI API key
-openai.api_key = "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"
+client = OpenAI(api_key="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")
 
-# User input
-user_input = st.text_input("Your message:", "")
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = "gpt-4.0"
 
-# Function to get a response from the OpenAI GPT endpoint
-def get_gpt_response(message):
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4-mini",
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+if prompt := st.chat_input("What is up?"):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    with st.chat_message("assistant"):
+        stream = client.chat.completions.create(
+            model=st.session_state["openai_model"],
             messages=[
-                {"role": "system", "content": "You are Neurofy, a helpful chatbot."},
-                {"role": "user", "content": message}
-            ]
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            stream=True,
         )
-        # Extract and return the GPT response
-        return response.choices[0].message["content"]
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
-
-
-# Display the response if user has input a message
-if user_input:
-    response = get_gpt_response(user_input)
-    st.text_area("Neurofy's response:", value=response, height=200)
-
+        response = st.write_stream(stream)
+    st.session_state.messages.append({"role": "assistant", "content": response})
