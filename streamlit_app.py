@@ -2,11 +2,11 @@ import streamlit as st
 import openai
 
 # Set up the Streamlit app
-st.title("Neurofy Chatbot")
+st.title("Neurofy")
 st.write("Welcome to Neurofy! Start chatting below:")
 
 # OpenAI API key
-openai.api_key = "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"
+openai.api_key = "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"
 
 # User input
 user_input = st.text_input("Your message:", "")
