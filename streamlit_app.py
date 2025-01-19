@@ -6,7 +6,7 @@ st.title("Neurofy Chatbot")
 st.write("Welcome to Neurofy! Start chatting below:")
 
 # OpenAI API key
-openai.api_key = "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"
+openai.api_key = "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"
 
 # User input
 user_input = st.text_input("Your message:", "")
@@ -15,7 +15,7 @@ user_input = st.text_input("Your message:", "")
 def get_gpt_response(message):
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4-mini",
             messages=[
                 {"role": "system", "content": "You are Neurofy, a helpful chatbot."},
                 {"role": "user", "content": message}
